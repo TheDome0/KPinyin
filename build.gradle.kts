@@ -1,9 +1,10 @@
 plugins {
-    kotlin("multiplatform") version "1.7.21"
+    kotlin("multiplatform") version "1.8.0"
+    id("maven-publish")
 }
 
-group = "gg.bluepeak"
-version = "1.0-SNAPSHOT"
+group = "se.fluen"
+version = "0.0.1"
 
 repositories {
     mavenCentral()
@@ -22,7 +23,9 @@ kotlin {
     js(BOTH) {
         browser {
             commonWebpackConfig {
-                cssSupport.enabled = true
+                cssSupport {
+                    enabled.set(true)
+                }
             }
         }
     }
