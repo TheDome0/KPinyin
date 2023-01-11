@@ -12,4 +12,10 @@ class KPinyinTest {
         assertEquals("nihǎo", "nihao3".toPinyin())
         assertEquals("", "".toPinyin())
     }
+
+    @Test
+    fun test() {
+        val a = "ni3hao3".toPinyin()
+        assertEquals("nǐhǎo nǐ", ("$a ni3").toPinyin(true))
+    }
 }

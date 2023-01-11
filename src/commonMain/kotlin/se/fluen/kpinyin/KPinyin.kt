@@ -3,28 +3,34 @@ package se.fluen.kpinyin
 
 /**
  * Transliterates handwritten input into Pinyin
+ * @param spaced used for continuous input separated by spaces.
  * */
-fun String.toPinyin(): String = lowercase().splitToSequence(Regex("(?<=[1234])")).fold("") { r, s ->
-    when {
-        s.contains("iu") -> r + s.replaceFirst('u', placeToneMarks('u', s.last())).dropLast(1)
+fun String.toPinyin(spaced: Boolean = false): String = lowercase().splitToSequence(
+    if (spaced) Regex("""(?<=\s)""") else Regex("""(?<=[1234\s])""")
+)
+    .fold("") { r, s ->
+        if (s.contains(Regex("[1234]"))) {
+            when {
+                s.contains("iu") -> r + s.replaceFirst('u', placeToneMarks('u', s.last())).dropLast(1)
 
-        s.contains("ui") -> r + s.replaceFirst('i', placeToneMarks('i', s.last())).dropLast(1)
+                s.contains("ui") -> r + s.replaceFirst('i', placeToneMarks('i', s.last())).dropLast(1)
 
-        s.contains('a') -> r + s.replaceFirst('a', placeToneMarks('a', s.last())).dropLast(1)
+                s.contains('a') -> r + s.replaceFirst('a', placeToneMarks('a', s.last())).dropLast(1)
 
-        s.contains('o') -> r + s.replaceFirst('o', placeToneMarks('o', s.last())).dropLast(1)
+                s.contains('o') -> r + s.replaceFirst('o', placeToneMarks('o', s.last())).dropLast(1)
 
-        s.contains('e') -> r + s.replaceFirst('e', placeToneMarks('e', s.last())).dropLast(1)
+                s.contains('e') -> r + s.replaceFirst('e', placeToneMarks('e', s.last())).dropLast(1)
 
-        s.contains('i') -> r + s.replaceFirst('i', placeToneMarks('i', s.last())).dropLast(1)
+                s.contains('i') -> r + s.replaceFirst('i', placeToneMarks('i', s.last())).dropLast(1)
 
-        s.contains('u') -> r + s.replaceFirst('u', placeToneMarks('u', s.last())).dropLast(1)
+                s.contains('u') -> r + s.replaceFirst('u', placeToneMarks('u', s.last())).dropLast(1)
 
-        s.contains('ü') -> r + s.replaceFirst('ü', placeToneMarks('ü', s.last())).dropLast(1)
+                s.contains('ü') -> r + s.replaceFirst('ü', placeToneMarks('ü', s.last())).dropLast(1)
 
-        else -> r + s
+                else -> r + s
+            }
+        } else r + s
     }
-}
 
 private fun placeToneMarks(vowel: Char, tone: Char): Char {
     return when (vowel) {
